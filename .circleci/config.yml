@@ -137,10 +137,10 @@ jobs:
       - run:
           name: load Pantheon SSH key
           command: |
-            eval "$(ssh-agent -s)"
-            printf '%s' "$SSH_PRIVATE_KEY_B64" | base64 --decode > ../private.key
-            chmod 600 ../private.key
-            ssh-add ../private.key
+            mkdir -p ~/.ssh
+            printf '%s' "$SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            printf 'Host *.drush.in\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n' > ~/.ssh/config
 
       # Rsync the build artifact pieces web directory
       - run:
