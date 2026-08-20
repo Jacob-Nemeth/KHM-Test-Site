@@ -14,6 +14,7 @@ defaults: &defaults
     # TERMINUS_TOKEN: The Pantheon machine token
     # GITHUB_TOKEN:   The GitHub personal access token
     # GIT_EMAIL:    The email address to use when making commits
+    # SSH_PRIVATE_KEY_B64: Base64-encoded Pantheon SSH private key
     #
     # TEST_SITE_NAME: The name of the test site to provide when installing.
     # ADMIN_PASSWORD: The admin password to use when installing.
@@ -137,7 +138,7 @@ jobs:
           name: load Pantheon SSH key
           command: |
             eval "$(ssh-agent -s)"
-            printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ../private.key
+            printf '%s' "$SSH_PRIVATE_KEY_B64" | base64 --decode > ../private.key
             chmod 600 ../private.key
             ssh-add ../private.key
 
