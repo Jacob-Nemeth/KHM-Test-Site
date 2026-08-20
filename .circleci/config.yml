@@ -122,6 +122,9 @@ jobs:
   deploy_to_pantheon:
     <<: *defaults
     steps:
+      - add-ssh-keys:
+          fingerprints:
+            - "SHA256:ezQ8a3qFZTu1bnRoIQCHZQ0eA8X/3GJSO5lN4t0FJyc"
       - checkout
 
       # Attach the workspace
@@ -133,14 +136,6 @@ jobs:
           # https://github.com/pantheon-systems/docker-build-tools-ci/blob/6.x/scripts/set-environment
           name: setup-environment-vars
           command: /build-tools-ci/scripts/set-environment
-
-      - run:
-          name: load Pantheon SSH key
-          command: |
-            mkdir -p ~/.ssh
-            printf '%s' "$SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            printf 'Host *.drush.in\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n' > ~/.ssh/config
 
       # Rsync the build artifact pieces web directory
       - run:
