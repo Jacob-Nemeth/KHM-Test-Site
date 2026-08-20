@@ -137,7 +137,9 @@ jobs:
           name: load Pantheon SSH key
           command: |
             eval "$(ssh-agent -s)"
-            printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+            printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ../private.key
+            chmod 600 ../private.key
+            ssh-add ../private.key
 
       # Rsync the build artifact pieces web directory
       - run:
