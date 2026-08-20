@@ -78,7 +78,7 @@ default_steps: &default_steps
       artifacts:
         - backstop_data/**
 
-image: quay.io/pantheon-public/build-tools-ci:9.x
+image: quay.io/pantheon-public/build-tools-ci:9.x-php8.4
 
 options:
   max-time: 30

@@ -1,5 +1,5 @@
 # Build tools Dockerfile
-image: quay.io/pantheon-public/build-tools-ci:9.x
+image: quay.io/pantheon-public/build-tools-ci:9.x-php8.4
 
 # Default Variables
 variables:
