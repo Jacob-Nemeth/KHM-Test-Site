@@ -8,9 +8,9 @@ default_steps: &default_steps
   - step:
       name: Configure Environment Variables
       services:
-          - docker
+        - docker
       caches:
-          - docker
+        - docker
       script:
         - *bash_env_export
         - export CI_BRANCH=${BITBUCKET_BRANCH:-master} && echo $CI_BRANCH
@@ -25,37 +25,37 @@ default_steps: &default_steps
       artifacts:
         - .bashrc
   - parallel:
-    - step:
-        name: Static Tests
-        services:
-          - docker
-        caches:
-          - docker
-          - composer
-        script:
-          - *bash_env_export
-          - *bash_env_source
-          - ./.ci/test/static/run
-    - step:
-        name: Build PHP
-        services:
-          - docker
-        caches:
-          - docker
-          - composer
-        script:
-          - *bash_env_export
-          - *bash_env_source
-          - ./.ci/build/php
-        artifacts:
-          - web/**
-          - vendor/**
+      - step:
+          name: Static Tests
+          services:
+            - docker
+          caches:
+            - docker
+            - composer
+          script:
+            - *bash_env_export
+            - *bash_env_source
+            - ./.ci/test/static/run
+      - step:
+          name: Build PHP
+          services:
+            - docker
+          caches:
+            - docker
+            - composer
+          script:
+            - *bash_env_export
+            - *bash_env_source
+            - ./.ci/build/php
+          artifacts:
+            - web/**
+            - vendor/**
   - step:
       name: Deploy to Pantheon
       services:
-          - docker
+        - docker
       caches:
-          - docker
+        - docker
       script:
         - *bash_env_export
         - *bash_env_source
@@ -67,10 +67,10 @@ default_steps: &default_steps
       name: Test Visual Regression
       image: backstopjs/backstopjs:4.1.9
       services:
-          - docker
+        - docker
       caches:
-          - docker
-          - node
+        - docker
+        - node
       script:
         - *bash_env_export
         - *bash_env_source
@@ -78,7 +78,7 @@ default_steps: &default_steps
       artifacts:
         - backstop_data/**
 
-image: quay.io/pantheon-public/build-tools-ci:6.x
+image: quay.io/pantheon-public/build-tools-ci:9.x
 
 options:
   max-time: 30
@@ -86,25 +86,25 @@ options:
 pipelines:
   pull-requests:
     # Using the default_steps anchor means no other items can be added
-    '**': *default_steps
+    "**": *default_steps
   branches:
     # Using the default_steps anchor means no other items can be added
     master: *default_steps
   custom:
     clu:
-    - step:
-        name: Composer Lock Update
-        services:
-          - docker
-        caches:
-          - docker
-          - composer
-        script:
-          - export CI_BRANCH=${BITBUCKET_BRANCH:-master} && echo $CI_BRANCH
-          - export CI_BUILD_NUMBER=$BITBUCKET_BUILD_NUMBER && echo $CI_BUILD_NUMBER
-          - export CI_PROJECT_USERNAME=$BITBUCKET_REPO_OWNER && echo $CI_PROJECT_USERNAME
-          - export CI_PROJECT_REPONAME=$BITBUCKET_REPO_SLUG && echo $CI_PROJECT_REPONAME
-          - export CI_PROJECT_NAME=$BITBUCKET_REPO_FULL_NAME && echo $CI_PROJECT_NAME
-          - /build-tools-ci/scripts/set-environment
-          - terminus -n auth:login --machine-token="$TERMINUS_TOKEN"
-          - set -e && terminus project:clu $TERMINUS_SITE
+      - step:
+          name: Composer Lock Update
+          services:
+            - docker
+          caches:
+            - docker
+            - composer
+          script:
+            - export CI_BRANCH=${BITBUCKET_BRANCH:-master} && echo $CI_BRANCH
+            - export CI_BUILD_NUMBER=$BITBUCKET_BUILD_NUMBER && echo $CI_BUILD_NUMBER
+            - export CI_PROJECT_USERNAME=$BITBUCKET_REPO_OWNER && echo $CI_PROJECT_USERNAME
+            - export CI_PROJECT_REPONAME=$BITBUCKET_REPO_SLUG && echo $CI_PROJECT_REPONAME
+            - export CI_PROJECT_NAME=$BITBUCKET_REPO_FULL_NAME && echo $CI_PROJECT_NAME
+            - /build-tools-ci/scripts/set-environment
+            - terminus -n auth:login --machine-token="$TERMINUS_TOKEN"
+            - set -e && terminus project:clu $TERMINUS_SITE
