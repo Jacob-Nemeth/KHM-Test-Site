@@ -122,7 +122,7 @@ jobs:
   deploy_to_pantheon:
     <<: *defaults
     steps:
-      - add-ssh-keys:
+      - add_ssh_keys:
           fingerprints:
             - "SHA256:ezQ8a3qFZTu1bnRoIQCHZQ0eA8X/3GJSO5lN4t0FJyc"
       - checkout
