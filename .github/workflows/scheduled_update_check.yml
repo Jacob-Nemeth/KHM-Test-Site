@@ -28,7 +28,7 @@ env:
 jobs:
   scheduled_update_check:
     container:
-      image: quay.io/pantheon-public/build-tools-ci:9.x-php8.4
+      image: quay.io/pantheon-public/build-tools-ci:9.x-php8.3
       options: --user root
     runs-on: ubuntu-latest
     steps:
